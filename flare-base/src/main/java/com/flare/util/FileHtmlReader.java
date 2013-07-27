@@ -18,7 +18,7 @@ public class FileHtmlReader {
 			e.printStackTrace();
 		}
 	}
-	public String getHtml()
+	public String readHtml()
 	{
 		
 		buf = new BufferedReader(file);
