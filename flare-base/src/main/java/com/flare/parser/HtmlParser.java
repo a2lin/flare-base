@@ -1,10 +1,7 @@
-package com.flare.driver;
+package com.flare.parser;
 
-/**
- * Hello world!
- *
- */
-public class App 
+
+public class HtmlParser 
 {
     public static void main( String[] args )
     {
