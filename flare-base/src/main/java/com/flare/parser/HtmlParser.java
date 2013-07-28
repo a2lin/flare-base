@@ -1,42 +1,73 @@
 package com.flare.parser;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.htmlparser.Node;
-import org.htmlparser.NodeFilter;
-import org.htmlparser.Parser;
-import org.htmlparser.filters.CssSelectorNodeFilter;
-import org.htmlparser.util.NodeList;
-import org.htmlparser.util.ParserException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.flare.util.FileHtmlReader;
 
 
 public class HtmlParser 
 {
-	private Parser parser;
+	private Document doc;
     
 	public HtmlParser(String html)
 	{
-		parser = Parser.createParser(html,"UTF-8");
+		doc = Jsoup.parse(html);
 	}
 	
 	public ArrayList<String> getSections()
 	{
-		
-		NodeFilter nF = new CssSelectorNodeFilter("[class~='sectxt']");
-		NodeList nL;
-		try {
-			nL = parser.extractAllNodesThatMatch(nF);
-			System.out.println(nL.toHtml());
+		Elements link = doc.select("font[size=+2]");
+		for(int i = 0; i < link.size(); i++)
+		{
 			
-			for(int i = 0; i < nL.size(); i++)
+			//GETS THE SUBJECT CODE (i.e. WCWP or AIP or whatever)
+			String s = link.get(i).nextElementSibling().nextElementSibling().nextElementSibling().toString();
+			s = s.replaceAll(".*\\(", "");
+			s=s.replaceAll("\\).*","");
+
+			
+			System.out.println(">>>>>>");
+			Elements tableloc = link.get(i).parent().select("[class=TITLETXT]");
+			Pattern p = Pattern.compile("<tr class=\"blacktxt\">");
+			Matcher m;
+			for(int j = 0; j < tableloc.size(); j++)
 			{
-				Node n = nL.elementAt(i);
-				System.out.println(n.getFirstChild().getText());
+				System.out.println("^^^^^^^^");
+				Element tr = tableloc.get(j).parent().parent().parent().parent().parent().nextElementSibling();
+				String str = tr.toString();
+				
+				while(p.matcher(str).find())
+				{
+					System.out.println("==");
+					System.out.println(tr.toString());
+//					System.out.println("======");
+					tr = tr.nextElementSibling();
+					if(tr == null)
+					{
+						break;
+					}
+					else
+					{
+						str = tr.toString();
+					}
+				}
 			}
-		} catch (ParserException e) {
-			e.printStackTrace();
+//			System.out.println(link.get(i).parent().select("[align=right]"));
+//			System.out.println(">>>>");
+//			Elements tr = link.get(i).parent().select("[class=blacktxt]");
+//			for(int j = 0; j < tr.size(); j++)
+//			{
+//				System.out.println(tr.get(j).select("[class=sectxt]"));
+//			}
+//			System.out.println(link.get(i).parent().select("[class=blacktxt]"));
+			System.out.println("<<<<<");
 		}
 		return null;
 	}
