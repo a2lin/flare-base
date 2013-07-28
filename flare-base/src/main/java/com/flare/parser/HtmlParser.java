@@ -22,7 +22,10 @@ public class HtmlParser
     
 	public HtmlParser(String html)
 	{
-		doc = Jsoup.parse(html);
+		String htFixed = html.replaceAll("<center>", "");
+		htFixed = htFixed.replaceAll("</center>", "");
+		htFixed = htFixed.replaceAll("<font face=\"arial\" size=\"-1\">.*?</font>", "");
+		doc = Jsoup.parse(htFixed);
 	}
 	
 	public ArrayList<ArrayList<String>> getSections()
@@ -35,6 +38,7 @@ public class HtmlParser
 			if(link.get(i).hasAttr("face")){
 				continue;
 			}
+			
 			String sID;
 			//GETS THE SUBJECT CODE (i.e. WCWP or AIP or whatever)
 			//TODO -> Fix this logic, i don't think we need this check
@@ -55,7 +59,27 @@ public class HtmlParser
 
 			
 //			System.out.println(">>>>>>");
-			Elements tableloc = link.get(i).parent().select("[class=TITLETXT]");
+//				System.out.println("139");
+				Element tableParent = link.get(i).nextElementSibling();
+//				System.out.println(link.get(i).nextElementSibling().nextElementSibling().nextElementSibling());
+				while(tableParent != null && !tableParent.tag().toString().trim().equals("table"))
+				{
+//					System.out.print("*");
+					tableParent = tableParent.nextElementSibling();
+				}
+				if(tableParent == null)
+				{
+					continue;
+				}
+//				System.out.println(link.get(i).nextElementSibling().nextElementSibling().nextElementSibling().nextElementSibling());
+//				System.out.println("======");
+//				System.out.println(tableParent);
+//				if(link.get(i).nextElementSibling().nextElementSibling().nextElementSibling().nextElementSibling() == null)
+//				{
+//					
+//				}
+//			Elements tableloc = link.get(i).parent().select("[class=TITLETXT]");
+			Elements tableloc = tableParent.select("[class=TITLETXT]");
 			Pattern p = Pattern.compile("<tr class=\"blacktxt\">");
 			
 			for(int j = 0; j < tableloc.size(); j++)
@@ -71,8 +95,10 @@ public class HtmlParser
 //				{
 ////					System.out.println(lecture[k]);
 //				}
-				
-				
+				String coursenum = tableloc.get(j).parent().parent().parent().parent().previousSibling().toString();
+				coursenum = coursenum.replaceAll("<td.*?>", "");
+				coursenum = coursenum.replaceAll("</td>", "");
+				coursenum = coursenum.trim();
 				while(p.matcher(str).find())
 				{
 //					System.out.println("==");
@@ -92,6 +118,8 @@ public class HtmlParser
 					}
 					classEvent.add(quarter);
 					classEvent.add(sID);
+					classEvent.add(coursenum);
+
 					for(int z = 3; z < arr.length; z++ )
 					{
 						if(arr[z].trim().equals("&nbsp;"))
@@ -103,7 +131,7 @@ public class HtmlParser
 							classEvent.add(""+arr[z].trim());
 						}
 					}
-					if(!classEvent.get(5).equals("<span class=\"redtxt\">Cancelled</span>") && !classEvent.get(5).equals("<span class=\"greentxt\">TBA</span>"))
+					if(!classEvent.get(6).equals("<span class=\"redtxt\">Cancelled</span>") && !classEvent.get(6).equals("<span class=\"greentxt\">TBA</span>"))
 					aList.add(classEvent);
 
 //					for(String s:classEvent)
@@ -135,7 +163,7 @@ public class HtmlParser
 //			System.out.println(link.get(i).parent().select("[class=blacktxt]"));
 //			System.out.println("<<<<<");
 		}
-		
+//		
 		for(ArrayList<String> s : aList)
 		{
 			for(String s2 : s)
@@ -147,14 +175,4 @@ public class HtmlParser
 		System.out.println(aList.size());
 		return aList;
 	}
-	
-	public static void main( String[] args )
-    {
-		//String html = "<html><head></head><body><td class='sectxt'>17039</td><td class='sectxt'>17038</td></body></html>";
-        String uri = "/Users/alexanderlin/Desktop/CSched.html";
-		FileHtmlReader fhr = new FileHtmlReader(uri);
-		String html = fhr.readHtml();
-		HtmlParser hp = new HtmlParser(html);
-        hp.getSections();
-    }
 }

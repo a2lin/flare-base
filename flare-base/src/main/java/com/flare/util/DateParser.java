@@ -30,6 +30,7 @@ public class DateParser {
     		}
     		result[i] = time;
     	}
+
     	return result;
 	}
 }
