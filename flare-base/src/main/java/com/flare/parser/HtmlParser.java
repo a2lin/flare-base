@@ -28,20 +28,23 @@ public class HtmlParser
 		{
 			
 			//GETS THE SUBJECT CODE (i.e. WCWP or AIP or whatever)
-			String s = link.get(i).nextElementSibling().nextElementSibling().nextElementSibling().toString();
-			s = s.replaceAll(".*\\(", "");
-			s=s.replaceAll("\\).*","");
+			String sID = link.get(i).nextElementSibling().nextElementSibling().nextElementSibling().toString();
+			sID = sID.replaceAll(".*\\(", "");
+			sID=sID.replaceAll("\\).*","");
 
 			
 			System.out.println(">>>>>>");
 			Elements tableloc = link.get(i).parent().select("[class=TITLETXT]");
 			Pattern p = Pattern.compile("<tr class=\"blacktxt\">");
-			Matcher m;
+			
 			for(int j = 0; j < tableloc.size(); j++)
 			{
 				System.out.println("^^^^^^^^");
 				Element tr = tableloc.get(j).parent().parent().parent().parent().parent().nextElementSibling();
 				String str = tr.toString();
+				
+				String lecID = str;
+				String[] Lecture = lecID.split("\n");
 				
 				while(p.matcher(str).find())
 				{
