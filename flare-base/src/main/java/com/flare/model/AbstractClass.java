@@ -1,6 +1,6 @@
 package com.flare.model;
 
-public class Event {
+public abstract class AbstractClass {
 	public int id;
 	public String type;
 	public String code;
