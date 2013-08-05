@@ -20,11 +20,11 @@ public class DateParser {
     		String part2 = split2[1].substring(0,split2[1].length()-1);
     		int time = Integer.parseInt(part1+part2);
     		String hourmark = split2[1].substring(split2[1].length()-1,split2[1].length());
-    		if(hourmark.equals("p") && time != 1200)
+    		if(hourmark.equals("p") && time < 1200)
     		{
     			time += 1200;
     		}
-    		if(hourmark.equals("a") && time==1200)
+    		if(hourmark.equals("a") && time>=1200)
     		{
     			time -= 1200;
     		}

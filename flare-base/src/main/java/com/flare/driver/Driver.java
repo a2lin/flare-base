@@ -6,6 +6,7 @@ import com.flare.util.FileHtmlReader;
 
 public class Driver {
 	private static final String solr_base = "http://ec2-54-213-31-81.us-west-2.compute.amazonaws.com:8983/solr";
+//	private static final String solr_base = "http://localhost:8983/solr";
 	public static void main( String[] args )
     {
 		//String html = "<html><head></head><body><td class='sectxt'>17039</td><td class='sectxt'>17038</td></body></html>";

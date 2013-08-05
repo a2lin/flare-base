@@ -1,5 +1,7 @@
 package com.flare.parser;
 
+import com.flare.util.FileHtmlReader;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -34,5 +36,14 @@ public class AppTest
     public void testApp()
     {
         assertTrue( true );
+    }
+
+    public static void main(String[] args)
+    {
+    	String html_uri = "/Users/alexanderlin/Desktop/CSched.html";
+		FileHtmlReader fhr = new FileHtmlReader(html_uri);
+		String html = fhr.readHtml();
+		HtmlParser hp = new HtmlParser(html);
+    	hp.getSections();
     }
 }
