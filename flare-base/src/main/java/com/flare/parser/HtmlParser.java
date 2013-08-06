@@ -131,7 +131,8 @@ public class HtmlParser
 							classEvent.add(""+arr[z].trim());
 						}
 					}
-					if(!classEvent.get(6).equals("<span class=\"redtxt\">Cancelled</span>") && !classEvent.get(6).equals("<span class=\"greentxt\">TBA</span>"))
+					if(!classEvent.get(6).equals("<span class=\"redtxt\">Cancelled</span>") && !classEvent.get(6).equals("<span class=\"greentxt\">TBA</span>")
+							&& !classEvent.get(4).equals("FI"))
 					aList.add(classEvent);
 
 //					for(String s:classEvent)
