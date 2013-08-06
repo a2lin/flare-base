@@ -62,7 +62,8 @@ public class SolrFeeder {
 				offering = new SolrInputDocument();
 				fId = cid;
 				offering.addField("type", "offering");
-				offering.addField("id",fId);
+				offering.addField("cid",fId);
+				offering.addField("id", "offering."+fId);
 				offering.addField("subjcode", eventList.get(i).get(1));
 				offering.addField("courseno", eventList.get(i).get(2));
 			}
